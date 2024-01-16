@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct HomePage: View {
     //    @State var tabSelected: Int = (Calendar.current.dateComponents([.weekday], from: Date()).weekday ?? 1) - 1
     @State var tabSelected: Int = Date.convertToMondayWeek()
@@ -35,9 +36,19 @@ struct HomePage: View {
                 }
                 // TODO: change timetable scroll view to implement all of this
                 TabView(selection: $tabSelected) {
+                    
                     ForEach(0..<7) { tabSel in
-                        if let selectedTT = timetableViewModel.timetable[TimetableViewModel.daysOfTheWeek[tabSel]] {
-                            TimeTableScrollView(selectedTT: selectedTT, tabSelected: $tabSelected).environmentObject(timetableViewModel)
+                        //                        if let selectedTT = timetableViewModel.timetable[TimetableViewModel.daysOfTheWeek[tabSel]] {
+                        //                            TimeTableScrollView(selectedTT: selectedTT, tabSelected: $tabSelected).environmentObject(timetableViewModel)
+                        //                        }
+                        if tabSel == 0 {
+                            TimeTableScrollView(selectedTT: [],
+                                                tabSelected: $tabSelected).environmentObject(timetableViewModel)
+                        } else {
+                            TimeTableScrollView(selectedTT:
+                                                    [Classes(), Classes(), Classes(), Classes(), Classes(),
+                                                     Classes(), Classes(), Classes(), Classes(),Classes()],
+                                                tabSelected: $tabSelected).environmentObject(timetableViewModel)
                         }
                     }
                 }
@@ -83,6 +94,6 @@ struct HomePage: View {
 
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
-        HomePage()
+        HomePage().environmentObject(TimetableViewModel()).environmentObject(AuthService()).environmentObject(NotificationsViewModel())
     }
 }

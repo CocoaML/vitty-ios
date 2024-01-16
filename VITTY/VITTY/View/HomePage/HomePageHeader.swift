@@ -56,10 +56,10 @@ struct HomePageHeader: View {
     }
 }
 
-struct HomePageHeader_Previews: PreviewProvider {
-    static var previews: some View {
-        HomePageHeader(goToSettings: .constant(false), showLogout: .constant(false))
-            .previewLayout(.sizeThatFits)
-    }
+#Preview {
+    HomePageHeader(goToSettings: .constant(false), showLogout: .constant(false))
+        .previewLayout(.sizeThatFits)
+        .background(Color.black)
 }
+
 

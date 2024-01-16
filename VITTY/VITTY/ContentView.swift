@@ -16,18 +16,21 @@ struct ContentView: View {
     @StateObject var notifVM = NotificationsViewModel()
     var body: some View {
         NavigationView {
-            if authState.loggedInUser != nil {
+            
+            if isFirstLogin() {
+                SplashScreen()
+                    .navigationTitle("")
+                    .navigationBarHidden(true)
+                    .onAppear {
+                        UserDefaults.standard.setValue(true, forKey: "isfirst")
+                    }
+            } else {
                 InstructionsView()
                     .navigationTitle("")
                     .navigationBarHidden(true)
                     .animation(.default)
-            } else {
-                SplashScreen()
-                    .navigationTitle("")
-                    .navigationBarHidden(true)
             }
         }
-//        .animation(.default)
         .onAppear(perform: NotificationsManager.shared.getNotificationSettings)
         .onChange(of: NotificationsManager.shared.authStatus) { authorizationStat in
             
@@ -47,6 +50,13 @@ struct ContentView: View {
         .environmentObject(timeTableVM)
         .environmentObject(notifVM)
     }
+    
+    func isFirstLogin() -> Bool {
+//        if (UserDefaults.standard.value(forKey: "isfirst") ?? true) as! Bool {
+//            return false
+//        }
+        return true
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -54,3 +64,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView(authState: AuthService())
     }
 }
+
+

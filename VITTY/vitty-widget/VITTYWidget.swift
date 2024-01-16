@@ -7,8 +7,8 @@
 
 import WidgetKit
 import SwiftUI
-import Firebase
-import FirebaseAuth
+//import Firebase
+//import FirebaseAuth
 
 struct VITTYProvider: TimelineProvider {
     
@@ -73,13 +73,13 @@ struct VITTYWidget: Widget {
     let kind: String = "com.gdscvit.vittyios.vitty-widget"
     
     init() {
-        FirebaseApp.configure()
-        do {
-            try Auth.auth().useUserAccessGroup(AppConstants.VITTYappgroup)
-        } catch let error as NSError {
-          print("Error changing user access group: %@", error)
-        }
-                try? Auth.auth().useUserAccessGroup(AppConstants.VITTYappgroup)
+//        FirebaseApp.configure()
+//        do {
+//            try Auth.auth().useUserAccessGroup(AppConstants.VITTYappgroup)
+//        } catch let error as NSError {
+//          print("Error changing user access group: %@", error)
+//        }
+//                try? Auth.auth().useUserAccessGroup(AppConstants.VITTYappgroup)
     }
 
     var body: some WidgetConfiguration {

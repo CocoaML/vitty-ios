@@ -30,5 +30,6 @@ struct SettingsHeader: View {
 struct SettingsHeader_Previews: PreviewProvider {
     static var previews: some View {
         SettingsHeader(buttonAction: {})
+            .background(Color.black)
     }
 }

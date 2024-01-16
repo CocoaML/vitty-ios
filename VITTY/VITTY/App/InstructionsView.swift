@@ -10,7 +10,7 @@ import SwiftUI
 struct InstructionsView: View {
     @EnvironmentObject var authState: AuthService
     @EnvironmentObject var ttVM: TimetableViewModel
-    @State var goToHomeScreen = UserDefaults.standard.bool(forKey: "instructionsComplete")
+    @State var goToHomeScreen = false
     @State var displayLogout: Bool = false
     @State var displayFollowInstructions = false
     @EnvironmentObject var notifVM: NotificationsViewModel
@@ -43,17 +43,17 @@ struct InstructionsView: View {
                 Spacer()
                 CustomButton(buttonText: "Done") {
                     self.displayFollowInstructions = true
-                    if ttVM.timetable.isEmpty {
-                        ttVM.getData {
-                            if !notifsSetup {
-                                notifVM.setupNotificationPreferences(timetable: ttVM.timetable)
-                            }
-                        }
-                    } else {
+//                    if ttVM.timetable.isEmpty {
+//                        ttVM.getData {
+//                            if !notifsSetup {
+//                                notifVM.setupNotificationPreferences(timetable: ttVM.timetable)
+//                            }
+//                        }
+//                    } else {
                         print("time table is populated")
                         UserDefaults.standard.set(true, forKey:"instructionsComplete")
                         goToHomeScreen = true
-                    }
+//                    }
                 }
                 NavigationLink(destination: HomePage().navigationTitle("").navigationBarHidden(true).environmentObject(ttVM).environmentObject(authState).environmentObject(notifVM), isActive: $goToHomeScreen) {
                     EmptyView()
@@ -81,5 +81,8 @@ struct InstructionsView: View {
 struct InstructionsView_Previews: PreviewProvider {
     static var previews: some View {
         InstructionsView()
+            .environmentObject(AuthService())
+            .environmentObject(TimetableViewModel())
+            .environmentObject(NotificationsViewModel())
     }
 }

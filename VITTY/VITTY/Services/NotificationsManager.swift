@@ -8,8 +8,8 @@
 import Foundation
 import UserNotifications
 import UIKit
-import Firebase
-import FirebaseMessaging
+//import Firebase
+//import FirebaseMessaging
 
 class NotificationsManager: NSObject, ObservableObject {
     
@@ -137,52 +137,52 @@ class NotificationsManager: NSObject, ObservableObject {
 }
 
 
-extension NotificationsManager: UNUserNotificationCenterDelegate, MessagingDelegate {
-    func registerForPushNotifications() {
-        UIApplication.shared.registerForRemoteNotifications()
-        let center = UNUserNotificationCenter.current()
-        center.delegate = self
-        Messaging.messaging().delegate = self
-        center.getNotificationSettings(completionHandler: { (settings) in
-            switch settings.authorizationStatus {
-            case .authorized, .provisional:
-                self.isPushEnabled = true
-                DispatchQueue.main.async {
-                    UIApplication.shared.registerForRemoteNotifications()
-                }
-            case .denied, .ephemeral:
-                break
-            case .notDetermined:
-                center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
-                    if granted && error == nil {
-                        self.isPushEnabled = true
-                        DispatchQueue.main.async {
-                            UIApplication.shared.registerForRemoteNotifications()
-                        }
-                    } else {
-                    }
-                }
-            @unknown default:
-                break
-            }
-        })
-    }
-    
-    func didRegisterForRemoteNotifications(_ tokenData: Data) {
-        Messaging.messaging().apnsToken = tokenData
-    }
-    
-    func messaging(
-        _ messaging: Messaging,
-        didReceiveRegistrationToken fcmToken: String?
-    ) {
-        print("Firebase registration token: \(String(describing: fcmToken))")
-        let tokenDict = ["token": fcmToken ?? ""]
-        NotificationCenter.default.post(
-            name: Notification.Name("FCMToken"),
-            object: nil,
-            userInfo: tokenDict)
-    }
-    
-}
+//extension NotificationsManager: UNUserNotificationCenterDelegate, MessagingDelegate {
+//    func registerForPushNotifications() {
+//        UIApplication.shared.registerForRemoteNotifications()
+//        let center = UNUserNotificationCenter.current()
+//        center.delegate = self
+////        Messaging.messaging().delegate = self
+//        center.getNotificationSettings(completionHandler: { (settings) in
+//            switch settings.authorizationStatus {
+//            case .authorized, .provisional:
+//                self.isPushEnabled = true
+//                DispatchQueue.main.async {
+//                    UIApplication.shared.registerForRemoteNotifications()
+//                }
+//            case .denied, .ephemeral:
+//                break
+//            case .notDetermined:
+//                center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+//                    if granted && error == nil {
+//                        self.isPushEnabled = true
+//                        DispatchQueue.main.async {
+//                            UIApplication.shared.registerForRemoteNotifications()
+//                        }
+//                    } else {
+//                    }
+//                }
+//            @unknown default:
+//                break
+//            }
+//        })
+//    }
+//    
+//    func didRegisterForRemoteNotifications(_ tokenData: Data) {
+//        Messaging.messaging().apnsToken = tokenData
+//    }
+//    
+//    func messaging(
+//        _ messaging: Messaging,
+//        didReceiveRegistrationToken fcmToken: String?
+//    ) {
+//        print("Firebase registration token: \(String(describing: fcmToken))")
+//        let tokenDict = ["token": fcmToken ?? ""]
+//        NotificationCenter.default.post(
+//            name: Notification.Name("FCMToken"),
+//            object: nil,
+//            userInfo: tokenDict)
+//    }
+//    
+//}
 

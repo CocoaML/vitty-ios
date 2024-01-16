@@ -64,3 +64,10 @@ struct TimeTableScrollView: View {
     }
 }
 
+#Preview {
+    TimeTableScrollView(selectedTT: [Classes(), Classes(), Classes(), Classes(), Classes(),
+                                     Classes(), Classes(), Classes(), Classes(), Classes()],
+                        tabSelected: .constant(0))
+        .environmentObject(TimetableViewModel())
+        .background(Color.black)
+}

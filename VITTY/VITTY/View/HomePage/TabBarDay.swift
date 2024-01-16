@@ -34,6 +34,7 @@ struct TabBarDay: View {
 
 struct TabBarDay_Previews: PreviewProvider {
     static var previews: some View {
-        TabBarDay(tabSelected: .constant(1), i: 0)
+        TabBarDay(tabSelected: .constant(1), i: 1)
+            .background(Color.black)
     }
 }

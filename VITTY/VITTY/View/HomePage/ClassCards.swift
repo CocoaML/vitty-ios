@@ -83,5 +83,6 @@ struct ClassCards: View {
 struct ClassCards_Previews: PreviewProvider {
     static var previews: some View {
         ClassCards(classInfo: StringConstants.sampleClassDate, onlineMode: false)
+            .background(Color.black)
     }
 }

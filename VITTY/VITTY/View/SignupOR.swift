@@ -27,5 +27,6 @@ struct SignupOR: View {
 struct SignupOR_Previews: PreviewProvider {
     static var previews: some View {
         SignupOR()
+            .background(Color.black)
     }
 }

@@ -7,9 +7,9 @@
 
 import Combine
 import AuthenticationServices
-import Firebase
-import FirebaseAuth
-import GoogleSignIn
+//import Firebase
+//import FirebaseAuth
+//import GoogleSignIn
 import SwiftUI
 import CryptoKit
 
@@ -20,14 +20,14 @@ enum LoginOption {
 
 class AuthService: NSObject, ObservableObject {
     
-    @Published var loggedInUser: User?
+//    @Published var loggedInUser: User?
     @Published var isAuthenticating: Bool = false
     @Published var error: NSError?
     @Published var onboardingComplete: Bool = false
     
 //    static let shared = AuthService()
     
-    private let auth = Auth.auth()
+//    private let auth = Auth.auth()
     fileprivate var currentNonce: String?
     
     // MARK: UserDefault keys
@@ -38,21 +38,21 @@ class AuthService: NSObject, ObservableObject {
     static let notifsSetupKey = "notifsSetupKey"
     
     override init(){
-        do {
-            try Auth.auth().useUserAccessGroup(AppConstants.VITTYappgroup)
-        } catch let error as NSError {
-          print("Error changing user access group: %@", error)
-        }
-        loggedInUser = auth.currentUser
+//        do {
+//            try Auth.auth().useUserAccessGroup(AppConstants.VITTYappgroup)
+//        } catch let error as NSError {
+//          print("Error changing user access group: %@", error)
+//        }
+//        loggedInUser = auth.currentUser
         super.init()
         
-        auth.addStateDidChangeListener(authStateChanged)
+//        auth.addStateDidChangeListener(authStateChanged)
     }
     
-    private func authStateChanged(with auth: Auth, user: User?) {
-        guard user != self.loggedInUser else { return }
-        self.loggedInUser = user
-    }
+//    private func authStateChanged(with auth: Auth, user: User?) {
+//        guard user != self.loggedInUser else { return }
+//        self.loggedInUser = user
+//    }
     
     func login(with loginOption: LoginOption) {
         self.isAuthenticating = true
@@ -67,65 +67,65 @@ class AuthService: NSObject, ObservableObject {
     }
     
     private func signInWithGoogle() {
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        // Create Google Sign In configuration object.
-        let config = GIDConfiguration(clientID: clientID)
-        
-        guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-        guard let window = screen.windows.first?.rootViewController else { return }
-        // Start the sign in flow!
-        GIDSignIn.sharedInstance.signIn(with: config, presenting: window) { [unowned self] user, error in
-            
-            if let error = error {
-                print("Error: Couldn't authenticate with Google - \(error.localizedDescription)")
-                return
-            }
-            
-            guard
-                let authentication = user?.authentication,
-                let idToken = authentication.idToken
-            else {
-                return
-            }
-            
-            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                           accessToken: authentication.accessToken)
-           print("Google credential created. Proceeding to sign in with Firebase")
-            Auth.auth().signIn(with: credential, completion: authResultCompletionHandler)
-        }
+//        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+//        
+//        // Create Google Sign In configuration object.
+//        let config = GIDConfiguration(clientID: clientID)
+//        
+//        guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+//        guard let window = screen.windows.first?.rootViewController else { return }
+//        // Start the sign in flow!
+//        GIDSignIn.sharedInstance.signIn(with: config, presenting: window) { [unowned self] user, error in
+//            
+//            if let error = error {
+//                print("Error: Couldn't authenticate with Google - \(error.localizedDescription)")
+//                return
+//            }
+//            
+//            guard
+//                let authentication = user?.authentication,
+//                let idToken = authentication.idToken
+//            else {
+//                return
+//            }
+//            
+//            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+//                                                           accessToken: authentication.accessToken)
+//           print("Google credential created. Proceeding to sign in with Firebase")
+//            Auth.auth().signIn(with: credential, completion: authResultCompletionHandler)
+//        }
     }
     
     
-    private func authResultCompletionHandler(auth: AuthDataResult?, error: Error?){
-        DispatchQueue.main.async {
-            self.isAuthenticating = false
-            if let user = auth?.user {
-                self.loggedInUser = user
-                UserDefaults.standard.set(user.providerData[0].providerID, forKey: AuthService.providerIdKey)
-                UserDefaults.standard.set(user.displayName, forKey: AuthService.usernameKey)
-                UserDefaults.standard.set(user.email, forKey: AuthService.useremailKey)
-                UserDefaults.standard.set(false, forKey:AuthService.instructionsCompleteKey)
-                UserDefaults.standard.set(false, forKey:AuthService.notifsSetupKey)
-                print("signed in!")
-                print("Name: \(UserDefaults.standard.string(forKey: AuthService.usernameKey) ?? "uname")")
-                print("ProviderId: \(UserDefaults.standard.string(forKey: AuthService.providerIdKey) ?? "provider")")
-                print("Email: \(UserDefaults.standard.string(forKey: AuthService.useremailKey) ?? "email")")
-            } else if let error = error {
-                self.error = error as NSError
-            }
-            
-        }
-    }
+//    private func authResultCompletionHandler(auth: AuthDataResult?, error: Error?)
+//        DispatchQueue.main.async {
+//            self.isAuthenticating = false
+//            if let user = auth?.user {
+//                self.loggedInUser = user
+//                UserDefaults.standard.set(user.providerData[0].providerID, forKey: AuthService.providerIdKey)
+//                UserDefaults.standard.set(user.displayName, forKey: AuthService.usernameKey)
+//                UserDefaults.standard.set(user.email, forKey: AuthService.useremailKey)
+//                UserDefaults.standard.set(false, forKey:AuthService.instructionsCompleteKey)
+//                UserDefaults.standard.set(false, forKey:AuthService.notifsSetupKey)
+//                print("signed in!")
+//                print("Name: \(UserDefaults.standard.string(forKey: AuthService.usernameKey) ?? "uname")")
+//                print("ProviderId: \(UserDefaults.standard.string(forKey: AuthService.providerIdKey) ?? "provider")")
+//                print("Email: \(UserDefaults.standard.string(forKey: AuthService.useremailKey) ?? "email")")
+//            } else if let error = error {
+//                self.error = error as NSError
+//            }
+//            
+//        }
+//    }
     
     func signOut() {
-        do {
-            try auth.signOut()
-            //TODO: create method to reset all UserDefaults
-            UserDefaults.resetDefaults()
-        } catch let signOutError as NSError {
-            print("Error signing out: \(signOutError)")
-        }
+//        do {
+//            try auth.signOut()
+//            //TODO: create method to reset all UserDefaults
+//            UserDefaults.resetDefaults()
+//        } catch let signOutError as NSError {
+//            print("Error signing out: \(signOutError)")
+//        }
     }
     
 }
@@ -153,38 +153,38 @@ extension AuthService: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         print("Apple Sign in")
         
-        if let appleIdCred = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let nonce = currentNonce else {
-                fatalError("Invalid state: A login callback was received but no login request was sent")
-            }
-            guard let appleIdToken = appleIdCred.identityToken else {
-                print("Unable to fetch identity token")
-                return
-            }
-            guard let idTokenString = String(data: appleIdToken, encoding: .utf8) else {
-                print("Unable to serialize token string from data: \(appleIdToken.debugDescription)")
-                return
-            }
-            guard let authCode = appleIdCred.authorizationCode else {
-                print("Unable to getch Authorization Code")
-                return
-            }
-            guard let authCodeString = String(data: authCode, encoding: .utf8) else {
-                print("Unable to serialize Authorization Code")
-                return
-            }
-            
-            print(authCodeString)
-            
-            // Initializing Firebase credential
-            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
-            
-            // Sign in with Firebase
-            Auth.auth().signIn(with: credential, completion: authResultCompletionHandler)
-        }
-        else {
-            print("Error during authorization")
-        }
+//        if let appleIdCred = authorization.credential as? ASAuthorizationAppleIDCredential {
+//            guard let nonce = currentNonce else {
+//                fatalError("Invalid state: A login callback was received but no login request was sent")
+//            }
+//            guard let appleIdToken = appleIdCred.identityToken else {
+//                print("Unable to fetch identity token")
+//                return
+//            }
+//            guard let idTokenString = String(data: appleIdToken, encoding: .utf8) else {
+//                print("Unable to serialize token string from data: \(appleIdToken.debugDescription)")
+//                return
+//            }
+//            guard let authCode = appleIdCred.authorizationCode else {
+//                print("Unable to getch Authorization Code")
+//                return
+//            }
+//            guard let authCodeString = String(data: authCode, encoding: .utf8) else {
+//                print("Unable to serialize Authorization Code")
+//                return
+//            }
+//            
+//            print(authCodeString)
+//            
+//            // Initializing Firebase credential
+//            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
+//            
+//            // Sign in with Firebase
+//            Auth.auth().signIn(with: credential, completion: authResultCompletionHandler)
+//        }
+//        else {
+//            print("Error during authorization")
+//        }
         
     }
     

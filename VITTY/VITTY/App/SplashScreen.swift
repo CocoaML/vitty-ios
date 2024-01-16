@@ -8,47 +8,63 @@
 import SwiftUI
 
 struct SplashScreen: View {
+    @State private var showInstructions = false
+
     @State var selectedTab: Int = 0
     @State var onboardingComplete: Bool = false
     @EnvironmentObject var authState: AuthService
     var body: some View {
-        VStack {
-            TabView(selection: $selectedTab){
-                ForEach(0..<3) { _ in
-                    SplashScreenIllustration(selectedTab: $selectedTab)
+        NavigationView {
+            VStack {
+                TabView(selection: $selectedTab){
+                    ForEach(0..<3) { _ in
+                        SplashScreenIllustration(selectedTab: $selectedTab)
+                    }
                 }
-            }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-            SplashScreenTabIndicator(selectedTab: $selectedTab)
-            Spacer(minLength: 50)
-            if selectedTab < 2 {
-                CustomButton(buttonText:"Next") {
-                    selectedTab += 1
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                SplashScreenTabIndicator(selectedTab: $selectedTab)
+                Spacer(minLength: 50)
+                if selectedTab < 2 {
+                    CustomButton(buttonText:"Next") {
+                        selectedTab += 1
+                    }
+                    .padding(.vertical)
+                    
+                } else {
+                    CustomButton(buttonText:"Sign in with Apple",imageString: "logo_apple"){
+                        print("跳转页面")
+                        showInstructions = true
+                    }
+                 
+                    SignupOR()
+                    
+                    CustomButton(buttonText: "Sign in with Google", imageString: "logo_google"){
+                        showInstructions = true
+                    }
+              
+                    NavigationLink(destination:
+                                    InstructionsView(),
+                                   isActive: $showInstructions
+                    ) {
+                        EmptyView()
+                    }
+                    .navigationTitle("")
+                    .navigationBarHidden(true)
+                    
                 }
-                .padding(.vertical)
+                Spacer(minLength: 50)
                 
-            } else {
-                CustomButton(buttonText:"Sign in with Apple",imageString: "logo_apple"){
-                    authState.login(with: .appleSignin)
+                if true {
+                    NavigationLink(destination: InstructionsView()) {
+                        EmptyView()
+                    }
                 }
-                SignupOR()
                 
-                CustomButton(buttonText: "Sign in with Google", imageString: "logo_google"){
-                    authState.login(with: .googleSignin)
-                }
             }
-            Spacer(minLength: 50)
-            
-            if authState.loggedInUser != nil {
-                NavigationLink(destination: InstructionsView()) {
-                    EmptyView()
-                }
-            }
-            
+            .transition(.customTransition)
+            .padding()
+            .background(Image((selectedTab % 2 == 0) ? "SplashScreen13BG" : "SplashScreen2BG").resizable().scaledToFill().edgesIgnoringSafeArea(.all))
         }
-        //        .transition(.customTransition)
-        .padding()
-        .background(Image((selectedTab % 2 == 0) ? "SplashScreen13BG" : "SplashScreen2BG").resizable().scaledToFill().edgesIgnoringSafeArea(.all))
     }
 }
 

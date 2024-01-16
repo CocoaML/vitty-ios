@@ -30,5 +30,6 @@ struct NotificationsViewHeader: View {
 struct NotificationsViewHeader_Previews: PreviewProvider {
     static var previews: some View {
         NotificationsViewHeader(buttonAction: {})
+            .background(Color.black)
     }
 }
